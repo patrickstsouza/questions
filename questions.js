@@ -17,36 +17,38 @@ var newQuestionHTML = `
 <label id="new-question-header">New Question</label>
 <div class="question-input">
     <label class="question-label">Question:</label>
-    <input type="text"></input>
+    <input type="text" id="question"></input>
     <label id="correct-answer-label">Correct Answer</label>
 </div>
 <div class="question-input">
     <label class="question-label">Answer 1:</label>
-    <input type="text"></input>
+    <input type="text" id="answer1"></input>
     <input type="radio" name="correctChoice" value="1" class="correctAnswerRadio" checked></input>
 </div>
 <div class="question-input">
     <label class="question-label">Answer 2:</label>
-    <input type="text"></input>
+    <input type="text" id="answer2"></input>
     <input type="radio" name="correctChoice" value="2" class="correctAnswerRadio"></input>
 </div>
 <div class="question-input">
     <label class="question-label">Answer 3:</label>
-    <input type="text"></input>
+    <input type="text" id="answer3"></input>
     <input type="radio" name="correctChoice" value="3" class="correctAnswerRadio"></input>
 </div>
 <div class="question-input">
     <label class="question-label">Answer 4:</label>
-    <input type="text"></input>
+    <input type="text" id="answer4"></input>
     <input type="radio" name="correctChoice" value="4" class="correctAnswerRadio"></input>
 </div>
 <div id="new-question-buttons">
-    <button>Add Question</button>
+    <button onclick="addQuestion(); return false;">Add Question</button>
     <button onclick="closePopup(); return false;">Cancel</button>
 </div>
 `;
 
 var currentPopup;
+var lat;
+var long;
 
 // Closes the question popup
 function closePopup() {
@@ -57,13 +59,52 @@ function closePopup() {
     currentPopup.closePopup();
 }
 
+var newQuestionEndpoint = 'http://localhost:4480/addQuestion';
+
+// Calls the server with the new question data
+function addQuestion() {
+    console.log("adding question");
+    var question = document.getElementById("question").value;
+    var answer1 = document.getElementById("answer1").value;
+    var answer2 = document.getElementById("answer2").value;
+    var answer3 = document.getElementById("answer3").value;
+    var answer4 = document.getElementById("answer4").value;
+
+    // Getting radio button value
+    // Source: https://stackoverflow.com/questions/9618504/how-to-get-the-selected-radio-button-s-value
+    var correctAnswer = document.querySelector('input[name="correctChoice"]:checked').value;
+
+    var body = {
+        question,
+        answer1,
+        answer2,
+        answer3,
+        answer4,
+        correctAnswer,
+        lat,
+        long,
+    };
+
+    client = new XMLHttpRequest();
+    client.open('POST', newQuestionEndpoint , true);
+
+    // Tells the server we are sending JSON in the request body
+    client.setRequestHeader("Content-type", "application/json");
+
+    // client.onreadystatechange = function() {
+    // };
+    client.send(JSON.stringify(body));
+
+    closePopup();
+}
+
 // Sources:
 // https://leafletjs.com/examples/quick-start/
 // https://leafletjs.com/reference-1.3.0.html
 mymap.on('click', function(e) {
     // Gets lat and long from the event passed as parameter
-    var lat = e.latlng.lat;
-    var long = e.latlng.lng;
+    lat = e.latlng.lat;
+    long = e.latlng.lng;
     console.log('clicked on ', lat, long);
 
     // Adds a marker in the map for the clicked lat/long
