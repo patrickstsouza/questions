@@ -1,3 +1,4 @@
+// Endpoint for the addQuestion server call. Change here if the server changes address.
 var newQuestionEndpoint = 'http://developer.cege.ucl.ac.uk:30278/addQuestion';
 
 // load the map
@@ -48,22 +49,29 @@ var newQuestionHTML = `
 </div>
 `;
 
+// Will store the current open popup (only one can be opened at a time)
 var currentPopup;
+
+// Will store latitude and longitude the user has clicked
 var lat;
 var long;
 
 // Closes the question popup
 function closePopup() {
+    // Only closes if there is a popup to close
     if (!currentPopup) {
         return;
     }
 
+    // Closes popup
     currentPopup.closePopup();
 }
 
 // Calls the server with the new question data
 function addQuestion() {
     console.log("adding question");
+
+    // Getting the data from the form the user has filled in
     var question = document.getElementById("question").value;
     var answer1 = document.getElementById("answer1").value;
     var answer2 = document.getElementById("answer2").value;
@@ -74,6 +82,7 @@ function addQuestion() {
     // Source: https://stackoverflow.com/questions/9618504/how-to-get-the-selected-radio-button-s-value
     var correctAnswer = document.querySelector('input[name="correctChoice"]:checked').value;
 
+    // Data to be sent to server
     var body = {
         question,
         answer1,
@@ -85,14 +94,14 @@ function addQuestion() {
         long,
     };
 
+    // Creating a new request to be made to the server
     client = new XMLHttpRequest();
     client.open('POST', newQuestionEndpoint , true);
 
     // Tells the server we are sending JSON in the request body
     client.setRequestHeader("Content-type", "application/json");
 
-    // client.onreadystatechange = function() {
-    // };
+    // Sends the question data to the server as a string
     client.send(JSON.stringify(body));
 
     closePopup();
@@ -102,7 +111,7 @@ function addQuestion() {
 // https://leafletjs.com/examples/quick-start/
 // https://leafletjs.com/reference-1.3.0.html
 mymap.on('click', function(e) {
-    // Gets lat and long from the event passed as parameter
+    // Gets lat and long from the event passed as parameter. Saves in global variables to be used in another function.
     lat = e.latlng.lat;
     long = e.latlng.lng;
     console.log('clicked on ', lat, long);
