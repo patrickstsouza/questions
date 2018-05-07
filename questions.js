@@ -59,7 +59,7 @@ function closePopup() {
     currentPopup.closePopup();
 }
 
-var newQuestionEndpoint = 'http://localhost:4480/addQuestion';
+var newQuestionEndpoint = 'http://developer.cege.ucl.ac.uk:31278/addQuestion';
 
 // Calls the server with the new question data
 function addQuestion() {
