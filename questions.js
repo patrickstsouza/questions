@@ -1,3 +1,5 @@
+var newQuestionEndpoint = 'http://developer.cege.ucl.ac.uk:30278/addQuestion';
+
 // load the map
 var mymap = L.map('mapid').setView([51.505, -0.09], 13);
 
@@ -58,8 +60,6 @@ function closePopup() {
 
     currentPopup.closePopup();
 }
-
-var newQuestionEndpoint = 'http://developer.cege.ucl.ac.uk:30278/addQuestion';
 
 // Calls the server with the new question data
 function addQuestion() {
