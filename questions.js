@@ -1,10 +1,9 @@
 // Endpoint for the addQuestion server call. Change here if the server changes address.
 var newQuestionEndpoint = 'http://developer.cege.ucl.ac.uk:30278/addQuestion';
 
-// load the map
+// Loads maps and tiles
+// Adapted from couse exercises - practical week 4
 var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-
-// load the tiles
 L.tileLayer(
     'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -95,6 +94,7 @@ function addQuestion() {
     };
 
     // Creating a new request to be made to the server
+    // Source: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
     client = new XMLHttpRequest();
     client.open('POST', newQuestionEndpoint , true);
 
